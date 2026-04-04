@@ -13,9 +13,9 @@ description: "Task list for Phase 1: Core Infrastructure implementation"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Initialize Node.js project (package.json) in `backend/`
-- [ ] T002 Install dependencies (`express`, `better-sqlite3`, `modbus-serial`, `cors`) in `backend/`
-- [ ] T003 Configure development scripts (e.g., node --watch) in `backend/package.json`
+- [x] T001 Initialize Node.js project (package.json) in `backend/`
+- [x] T002 Install dependencies (`express`, `better-sqlite3`, `modbus-serial`, `cors`) in `backend/`
+- [x] T003 Configure development scripts (e.g., node --watch) in `backend/package.json`
 
 ---
 
@@ -25,9 +25,9 @@ description: "Task list for Phase 1: Core Infrastructure implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Setup SQLite database initialization logic in `backend/src/models/db.js`
-- [ ] T005 Setup basic Express server application structure in `backend/src/app.js` and `backend/src/index.js`
-- [ ] T006 Configure error handling and CORS middleware in `backend/src/app.js`
+- [x] T004 Setup SQLite database initialization logic in `backend/src/models/db.js`
+- [x] T005 Setup basic Express server application structure in `backend/src/app.js` and `backend/src/index.js`
+- [x] T006 Configure error handling and CORS middleware in `backend/src/app.js`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin.
 
@@ -41,10 +41,10 @@ description: "Task list for Phase 1: Core Infrastructure implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T007 [P] [US1] Create settings model with get/update functions and table init script in `backend/src/models/settings.js`
-- [ ] T008 [US1] Implement GET `/api/settings` endpoint in `backend/src/api/settings.js`
-- [ ] T009 [US1] Implement POST `/api/settings` endpoint in `backend/src/api/settings.js` with basic validation
-- [ ] T010 [US1] Mount the settings route in `backend/src/app.js`
+- [x] T007 [P] [US1] Create settings model with get/update functions and table init script in `backend/src/models/settings.js`
+- [x] T008 [US1] Implement GET `/api/settings` endpoint in `backend/src/api/settings.js`
+- [x] T009 [US1] Implement POST `/api/settings` endpoint in `backend/src/api/settings.js` with basic validation
+- [x] T010 [US1] Mount the settings route in `backend/src/app.js`
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently. The configuration API operates on top of the foundation.
 
@@ -58,9 +58,9 @@ description: "Task list for Phase 1: Core Infrastructure implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T011 [P] [US2] Create PLC service handling connect, disconnect, and state management using `modbus-serial` in `backend/src/services/plc.js`
-- [ ] T012 [US2] Implement auto-connect logic on server startup in `backend/src/index.js` leveraging `backend/src/models/settings.js` and `backend/src/services/plc.js`
-- [ ] T013 [US2] Integrate the reconnect logic into the POST `/api/settings` route in `backend/src/api/settings.js` to apply live connection changes
+- [x] T011 [P] [US2] Create PLC service handling connect, disconnect, and state management using `modbus-serial` in `backend/src/services/plc.js`
+- [x] T012 [US2] Implement auto-connect logic on server startup in `backend/src/index.js` leveraging `backend/src/models/settings.js` and `backend/src/services/plc.js`
+- [x] T013 [US2] Integrate the reconnect logic into the POST `/api/settings` route in `backend/src/api/settings.js` to apply live connection changes
 
 **Checkpoint**: At this point, the application connects to the PLC utilizing user-provided configurations dynamically. Unreachable PLC components correctly retry or remain ready. Both US1 and US2 work independently.
 
@@ -70,8 +70,8 @@ description: "Task list for Phase 1: Core Infrastructure implementation"
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T014 Review and validate backend error logging to ensure API connection problems report clearly.
-- [ ] T015 Run quickstart.md validation locally to verify instructions work cleanly on an empty state
+- [x] T014 Review and validate backend error logging to ensure API connection problems report clearly.
+- [x] T015 Run quickstart.md validation locally to verify instructions work cleanly on an empty state
 
 ---
 
