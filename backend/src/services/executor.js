@@ -22,19 +22,37 @@ class ExecutorService {
 
       if (isDuplicate) {
         clearTimeout(this.executionMap.get(coil));
-        console.log(`[Executor] Extended queue duration for coil ${coil} (Override)`);
+        const msg = `[Executor] Extended queue duration for coil ${coil} (Override)`;
+        console.log(msg);
+        eventBus.emit('log', { timestamp: Date.now(), type: 'INFO', message: msg });
       }
 
       if (!isDuplicate) {
         PLCService.getClient().writeCoil(coil, true)
-          .then(() => console.log(`[Executor] Wrote ON to coil ${coil}`))
-          .catch(e => console.error(`[Executor] Modbus error on coil ${coil} ON:`, e.message));
+          .then(() => {
+            const msg = `[Executor] Wrote ON to coil ${coil}`;
+            console.log(msg);
+            eventBus.emit('log', { timestamp: Date.now(), type: 'INFO', message: msg });
+          })
+          .catch(e => {
+            const msg = `[Executor] Modbus error on coil ${coil} ON: ${e.message}`;
+            console.error(msg);
+            eventBus.emit('log', { timestamp: Date.now(), type: 'ERROR', message: msg });
+          });
       }
       
       const timer = setTimeout(() => {
         PLCService.getClient().writeCoil(coil, false)
-          .then(() => console.log(`[Executor] Wrote OFF to coil ${coil}`))
-          .catch(e => console.error(`[Executor] Modbus error on coil ${coil} OFF:`, e.message));
+          .then(() => {
+            const msg = `[Executor] Wrote OFF to coil ${coil}`;
+            console.log(msg);
+            eventBus.emit('log', { timestamp: Date.now(), type: 'INFO', message: msg });
+          })
+          .catch(e => {
+            const msg = `[Executor] Modbus error on coil ${coil} OFF: ${e.message}`;
+            console.error(msg);
+            eventBus.emit('log', { timestamp: Date.now(), type: 'ERROR', message: msg });
+          });
         
         this.executionMap.delete(coil);
       }, duration);
