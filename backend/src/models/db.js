@@ -14,6 +14,14 @@ const initSchema = () => {
       plc_ip_address TEXT NOT NULL,
       plc_port INTEGER NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS rules (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      file_path TEXT UNIQUE NOT NULL,
+      coil INTEGER NOT NULL CHECK (coil >= 0 AND coil <= 7),
+      duration INTEGER NOT NULL,
+      enabled INTEGER NOT NULL DEFAULT 1 CHECK (enabled IN (0, 1))
+    );
   `);
 };
 

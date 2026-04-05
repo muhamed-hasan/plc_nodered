@@ -23,7 +23,7 @@ description: "Task list for Phase 2: Rule Management implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T001 Update SQLite database initialization logic in `backend/src/models/db.js` to create the `rules` table `(id, file_path, coil, duration, enabled)`.
+- [x] T001 Update SQLite database initialization logic in `backend/src/models/db.js` to create the `rules` table `(id, file_path, coil, duration, enabled)`.
 
 **Checkpoint**: Foundation ready - user story implementation can now begin.
 
@@ -37,9 +37,9 @@ description: "Task list for Phase 2: Rule Management implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T002 [P] [US1] Create Rules model in `backend/src/models/rules.js` and implement the `create` method.
-- [ ] T003 [P] [US1] Create API router in `backend/src/api/rules.js` and implement the POST `/api/rules` endpoing with input validations.
-- [ ] T004 [US1] Mount the `/api/rules` router inside `backend/src/app.js`.
+- [x] T002 [P] [US1] Create Rules model in `backend/src/models/rules.js` and implement the `create` method.
+- [x] T003 [P] [US1] Create API router in `backend/src/api/rules.js` and implement the POST `/api/rules` endpoing with input validations.
+- [x] T004 [US1] Mount the `/api/rules` router inside `backend/src/app.js`.
 
 **Checkpoint**: US1 fully functioning. Admins can successfully write new rules to the database.
 
@@ -53,8 +53,8 @@ description: "Task list for Phase 2: Rule Management implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T005 [P] [US2] Implement the `getAll` method in `backend/src/models/rules.js`.
-- [ ] T006 [P] [US2] Implement the GET `/api/rules` endpoint in `backend/src/api/rules.js`.
+- [x] T005 [P] [US2] Implement the `getAll` method in `backend/src/models/rules.js`.
+- [x] T006 [P] [US2] Implement the GET `/api/rules` endpoint in `backend/src/api/rules.js`.
 
 **Checkpoint**: Core Read/Write abilities completed.
 
@@ -68,8 +68,8 @@ description: "Task list for Phase 2: Rule Management implementation"
 
 ### Implementation for User Story 3 & 4
 
-- [ ] T007 [P] [US3] Implement the `update` method in `backend/src/models/rules.js`, handling partial or full field updates.
-- [ ] T008 [P] [US3] Implement the PUT `/api/rules/:id` endpoint in `backend/src/api/rules.js`.
+- [x] T007 [P] [US3] Implement the `update` method in `backend/src/models/rules.js`, handling partial or full field updates.
+- [x] T008 [P] [US3] Implement the PUT `/api/rules/:id` endpoint in `backend/src/api/rules.js`.
 
 **Checkpoint**: Modify operations available. Status toggling operates effortlessly.
 
@@ -83,8 +83,8 @@ description: "Task list for Phase 2: Rule Management implementation"
 
 ### Implementation for User Story 5
 
-- [ ] T009 [P] [US5] Implement the `delete` method in `backend/src/models/rules.js`.
-- [ ] T010 [P] [US5] Implement the DELETE `/api/rules/:id` endpoint in `backend/src/api/rules.js`.
+- [x] T009 [P] [US5] Implement the `delete` method in `backend/src/models/rules.js`.
+- [x] T010 [P] [US5] Implement the DELETE `/api/rules/:id` endpoint in `backend/src/api/rules.js`.
 
 **Checkpoint**: Full CRUD available on the API.
 
@@ -94,7 +94,7 @@ description: "Task list for Phase 2: Rule Management implementation"
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T011 Run `quickstart.md` CURL commands to validate end-to-end functionality of all the CRUD endpoints.
+- [x] T011 Run `quickstart.md` CURL commands to validate end-to-end functionality of all the CRUD endpoints.
 
 ---
 

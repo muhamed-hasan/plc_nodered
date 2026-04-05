@@ -8,9 +8,11 @@ app.use(cors());
 app.use(express.json());
 
 const settingsRoutes = require('./api/settings');
+const rulesRoutes = require('./api/rules');
 
 // Routes will be mounted here
 app.use('/api/settings', settingsRoutes);
+app.use('/api/rules', rulesRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
