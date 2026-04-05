@@ -31,9 +31,9 @@ tests/
 Node.js 20+: Follow standard conventions
 
 ## Recent Changes
+- 006-restart-recovery: Added Node.js 20+ + `modbus-serial`
 - 005-gui-control-panel: Added Node.js 20+; Next.js 14+ + `next`, `react`. No styling frameworks (Vanilla CSS).
 - 004-plc-execution: Added Node.js 20+ + `modbus-serial` (already integrated into Phase 1)
-- 003-file-watcher: Added Node.js 20+ + `chokidar` (external watcher module)
 
 
 <!-- MANUAL ADDITIONS START -->
