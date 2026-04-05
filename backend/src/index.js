@@ -14,4 +14,7 @@ app.listen(PORT, () => {
   } else {
     console.log('No PLC configuration detected. Awaiting setup.');
   }
+  // Initialize the File Watcher Service
+  const watcherService = require('./services/watcher');
+  watcherService.init();
 });

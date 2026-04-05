@@ -13,7 +13,7 @@ description: "Task list for Phase 3: File Watcher Engine implementation"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Install `chokidar` package as a normal dependency within `backend/package.json`.
+- [x] T001 Install `chokidar` package as a normal dependency within `backend/package.json`.
 
 ---
 
@@ -23,7 +23,7 @@ description: "Task list for Phase 3: File Watcher Engine implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T002 Create a native Node.js `EventEmitter` singleton export in `backend/src/services/eventBus.js`.
+- [x] T002 Create a native Node.js `EventEmitter` singleton export in `backend/src/services/eventBus.js`.
 
 **Checkpoint**: Foundation ready - decoupled event channel established.
 
@@ -37,8 +37,8 @@ description: "Task list for Phase 3: File Watcher Engine implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T003 [US1] Create the core `WatcherService` in `backend/src/services/watcher.js`. It must fetch `enabled = 1` rules from SQLite (`Rules` model) on boot and feed them into `chokidar.watch()`, tracking `add` and `change` events.
-- [ ] T004 [US1] Import and initialize the `WatcherService` at the bottom of `backend/src/index.js` during server startup.
+- [x] T003 [US1] Create the core `WatcherService` in `backend/src/services/watcher.js`. It must fetch `enabled = 1` rules from SQLite (`Rules` model) on boot and feed them into `chokidar.watch()`, tracking `add` and `change` events.
+- [x] T004 [US1] Import and initialize the `WatcherService` at the bottom of `backend/src/index.js` during server startup.
 
 **Checkpoint**: At this point, the node process successfully binds directly to target OS files and logs noisy outputs freely upon external writes.
 
@@ -52,7 +52,7 @@ description: "Task list for Phase 3: File Watcher Engine implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T005 [P] [US2] Inside `backend/src/services/watcher.js`, introduce a `Map()` to store active timeout handles keyed by `file_path`. Upon `chokidar` input, clear previously existing handles for a file and set a 300ms `setTimeout()` before proceeding.
+- [x] T005 [P] [US2] Inside `backend/src/services/watcher.js`, introduce a `Map()` to store active timeout handles keyed by `file_path`. Upon `chokidar` input, clear previously existing handles for a file and set a 300ms `setTimeout()` before proceeding.
 
 **Checkpoint**: Event storms are accurately swallowed natively by Node.
 
@@ -66,8 +66,8 @@ description: "Task list for Phase 3: File Watcher Engine implementation"
 
 ### Implementation for User Story 3
 
-- [ ] T006 [P] [US3] Inside the resolution block of `backend/src/services/watcher.js`, emit a `fileTriggered` event directly to `eventBus.js` including the path, mapped coil, duration, and timestamp.
-- [ ] T007 [P] [US3] Implement a structured `console.log` immediately after the emit identifying the file path and target coil execution.
+- [x] T006 [P] [US3] Inside the resolution block of `backend/src/services/watcher.js`, emit a `fileTriggered` event directly to `eventBus.js` including the path, mapped coil, duration, and timestamp.
+- [x] T007 [P] [US3] Implement a structured `console.log` immediately after the emit identifying the file path and target coil execution.
 
 **Checkpoint**: Engine logic is sealed and ready for Phase 4 to construct the Modbus PLC mappings!
 
@@ -77,7 +77,7 @@ description: "Task list for Phase 3: File Watcher Engine implementation"
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T008 Run the rapid-fire bash hook documented in `quickstart.md` (`for i in {1..10}...`) to manually prove the debounce successfully silences 9 of the 10 writes.
+- [x] T008 Run the rapid-fire bash hook documented in `quickstart.md` (`for i in {1..10}...`) to manually prove the debounce successfully silences 9 of the 10 writes.
 
 ---
 
