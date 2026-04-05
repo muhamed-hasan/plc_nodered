@@ -9,6 +9,8 @@ Auto-generated from all feature plans. Last updated: 2026-04-06
 - N/A for raw files (Configuration comes from existing `better-sqlite3` `Rules` model) (003-file-watcher)
 - Node.js 20+ + `modbus-serial` (already integrated into Phase 1) (004-plc-execution)
 - Transient runtime OS states (Maps for bounding hardware timers) (004-plc-execution)
+- Node.js 20+; Next.js 14+ + `next`, `react`. No styling frameworks (Vanilla CSS). (005-gui-control-panel)
+- N/A for this phase. (005-gui-control-panel)
 
 - Node.js 20+ + `express` (HTTP API), `better-sqlite3` (Database), `modbus-serial` (PLC Communication) (001-core-infrastructure)
 
@@ -29,9 +31,9 @@ tests/
 Node.js 20+: Follow standard conventions
 
 ## Recent Changes
+- 005-gui-control-panel: Added Node.js 20+; Next.js 14+ + `next`, `react`. No styling frameworks (Vanilla CSS).
 - 004-plc-execution: Added Node.js 20+ + `modbus-serial` (already integrated into Phase 1)
 - 003-file-watcher: Added Node.js 20+ + `chokidar` (external watcher module)
-- 002-rule-management: Added Node.js 20+ + `express`, `better-sqlite3`
 
 
 <!-- MANUAL ADDITIONS START -->
