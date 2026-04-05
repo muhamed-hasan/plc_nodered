@@ -4,6 +4,7 @@ const PLCService = require('./plc');
 class ExecutorService {
   constructor() {
     this.executionMap = new Map();
+    this.executionMap.clear();
     this.setupListeners();
     console.log("Executor Service initialized.");
   }
