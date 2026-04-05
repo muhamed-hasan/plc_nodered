@@ -17,4 +17,7 @@ app.listen(PORT, () => {
   // Initialize the File Watcher Service
   const watcherService = require('./services/watcher');
   watcherService.init();
+
+  // Initialize the Executor Service
+  const executorService = require('./services/executor');
 });
