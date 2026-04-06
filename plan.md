@@ -101,6 +101,22 @@ System fully recovers after restart
 No manual intervention required
 No duplicated watchers or timers
 Errors are logged and handled gracefully
+Phase 7 — Frontend Configuration Management
+
+Provide a GUI to manage PLC settings and dynamic file-to-outputs mapping.
+
+Scope
+Remove `UNIQUE` constraint on `file_path` in SQLite `rules` table, allowing a single file to trigger multiple coils.
+Permit comma-separated file paths in a single rule to map multiple files to the same output(s) like Node-RED.
+Create a "Settings" UI component to update PLC IP & Port configurations.
+Create a "Rules" UI component allowing users to add watched files and link them to one or multiple outputs with custom durations.
+Ensure changes push cleanly to the backend APIs (`/api/settings`, `/api/rules`) and re-initialize the active watchers dynamically.
+Acceptance Criteria
+Users can fully configure the PLC connection from the dashboard.
+Users can visually connect a file path (or comma-separated paths) to one or multiple output coils.
+GUI perfectly reflects the backend's active state.
+System does not require manual API calls via curl to operate.
+
 Implementation Strategy
 Each phase is implemented using spec-kit workflow:
 specify
