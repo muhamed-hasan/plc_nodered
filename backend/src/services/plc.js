@@ -1,4 +1,5 @@
 const ModbusRTU = require('modbus-serial');
+const eventBus = require('./eventBus');
 
 const client = new ModbusRTU();
 let isConnected = false;
@@ -25,10 +26,14 @@ class PLCService {
       await client.connectTCP(ip, { port });
       client.setID(1); // Default Modbus Unit ID
       isConnected = true;
-      console.log('Successfully connected to PLC.');
+      const msg = `Successfully connected to PLC at ${ip}:${port}.`;
+      console.log(msg);
+      eventBus.emit('log', { timestamp: Date.now(), type: 'INFO', message: msg });
     } catch (error) {
       isConnected = false;
-      console.error(`Failed to connect to PLC: ${error.message}`);
+      const msg = `Failed to connect to PLC: ${error.message}. Retrying in 5s...`;
+      console.error(msg);
+      eventBus.emit('log', { timestamp: Date.now(), type: 'WARN', message: msg });
       
       // Retry in 5 seconds
       this.connectRetryTimeout = setTimeout(() => {
@@ -60,13 +65,17 @@ class PLCService {
 
 // Handle unexpected closures
 client.on('error', (err) => {
-  console.error('PLC connection error:', err.message);
+  const msg = `PLC connection error: ${err.message}`;
+  console.error(msg);
+  eventBus.emit('log', { timestamp: Date.now(), type: 'ERROR', message: msg });
   isConnected = false;
 });
 
 client.on('close', () => {
   if (isConnected) {
-    console.warn('PLC connection closed unexpectedly.');
+    const msg = 'PLC connection closed unexpectedly.';
+    console.warn(msg);
+    eventBus.emit('log', { timestamp: Date.now(), type: 'ERROR', message: msg });
   }
   isConnected = false;
 });

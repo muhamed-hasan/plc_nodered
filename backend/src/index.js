@@ -7,17 +7,24 @@ const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   
-  // Try connecting to PLC if settings exist
+  const executorService = require('./services/executor');
+  const watcherService = require('./services/watcher');
   const settings = Settings.get();
+
+  const bootServices = () => {
+    watcherService.init();
+  };
+
   if (settings && settings.plc_ip_address && settings.plc_port) {
-    PLCService.connect(settings.plc_ip_address, settings.plc_port);
+    PLCService.connect(settings.plc_ip_address, settings.plc_port)
+      .then(() => {
+        console.log('Synchronous hardware boot bounds evaluated.');
+      })
+      .finally(() => {
+        setTimeout(bootServices, 500); // Wait for hardware state resolving
+      });
   } else {
     console.log('No PLC configuration detected. Awaiting setup.');
+    bootServices();
   }
-  // Initialize the File Watcher Service
-  const watcherService = require('./services/watcher');
-  watcherService.init();
-
-  // Initialize the Executor Service
-  const executorService = require('./services/executor');
 });

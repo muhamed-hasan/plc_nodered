@@ -47,7 +47,9 @@ class WatcherService {
     };
 
     eventBus.emit('fileTriggered', eventPayload);
-    console.log(`[Watch Event] Path: ${path} | Target Coil: ${rule.coil} | Duration: ${rule.duration}ms | Timestamp: ${eventPayload.timestamp}`);
+    const msg = `[Watch Event] Path: ${path} | Target Coil: ${rule.coil} | Duration: ${rule.duration}ms`;
+    console.log(`${msg} | Timestamp: ${eventPayload.timestamp}`);
+    eventBus.emit('log', { timestamp: Date.now(), type: 'INFO', message: msg });
   }
 }
 
