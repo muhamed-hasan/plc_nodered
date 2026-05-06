@@ -1,50 +1,58 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- Sync Impact Report:
+- Version Change: 0.0.0 -> 1.0.0
+- Modified Principles: Created Config-Driven, Deterministic Behavior, Restart-Safe, Single PLC Topology, Low Latency, Minimal Dependencies
+- Added Sections: Constraints, Guarantees, Non-Goals, Tech Stack
+- Removed Sections: Generic placeholders
+- Templates Required Updates: ✅ plan-template.md (check rules update)
+- TODOs: None
+-->
+
+# plcVisionControl Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Config-Driven
+All system logic must be driven by configuration files. Hardcoded behavioral logic is prohibited to ensure flexibility without code changes.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Deterministic Behavior
+The system must guarantee that the same input always produces the exact same output. State transitions must be predictable.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Restart-Safe
+System state must be reconstructed fully from SQLite upon restart. In-memory state without persistence is forbidden for critical operations.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Single PLC Topology
+The system communicates strictly with a single PLC over Modbus TCP. Multi-PLC support is intentionally out of scope.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Low Latency
+The processing pipeline MUST guarantee a trigger delay of strictly less than 500ms to ensure real-time responsiveness.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### VI. Minimal Dependencies
+Rely only on essential dependencies (e.g., Node.js, SQLite, chokidar, modbus-serial, Next.js) to reduce maintenance burden and security surface.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+## Constraints
+- **Deployment**: Linux-only environments.
+- **Data Store**: SQLite serves as the single overarching source of truth.
+- **Security**: No authentication layers (assumed internal tool).
+- **Trigger**: The system must trigger evaluation upon ANY recognized file change.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Guarantees
+- At most ONE active timer may exist per coil at any given time.
+- No duplicate PLC signals can be transmitted during rapid file change sequences.
+- Automatic full recovery of operations must complete successfully following any restart event.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Non-Goals
+- Multi-tenant architectures.
+- Distributed or microservice-based deployments.
+- Implementation of any complex rule engine.
+
+## Tech Stack
+- **Backend**: Node.js
+- **Database**: SQLite
+- **File Watcher**: chokidar
+- **PLC Communication**: modbus-serial
+- **Frontend App**: Next.js
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+All amendments to this constitution require documentation of the rationale and version bump. All PRs must comply with these stated guarantees and constraints. 
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-04-04 | **Last Amended**: 2026-04-04

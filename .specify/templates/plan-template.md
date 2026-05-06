@@ -31,7 +31,13 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- [ ] Is logic fully config-driven? (No hardcoded paths or values)
+- [ ] Is system behavior deterministic? 
+- [ ] Is it restart-safe? (State from SQLite)
+- [ ] Is it strictly single-PLC (Modbus TCP)?
+- [ ] Is trigger latency guaranteed <500ms?
+- [ ] Are we using the restricted tech stack (Node.js, SQLite, Next.js, etc.)?
+- [ ] Are we abiding by single-timer-per-coil limit without duplicates?
 
 ## Project Structure
 
