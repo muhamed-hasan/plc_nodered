@@ -1,0 +1,665 @@
+[
+    {
+        "id": "d11df81b731273a1",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "26c448f915529943",
+        "type": "modbus-write",
+        "z": "d11df81b731273a1",
+        "name": "M1",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "0",
+        "quantity": "1",
+        "server": "f6b85442f83a688f",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 750,
+        "y": 220,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "6bfa21b9e7901281",
+        "type": "debug",
+        "z": "d11df81b731273a1",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "c0a22bb544641c1c",
+        "type": "modbus-write",
+        "z": "d11df81b731273a1",
+        "name": "M2",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "1",
+        "quantity": "1",
+        "server": "f6b85442f83a688f",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 750,
+        "y": 420,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "5c40c34eaf162bb9",
+        "type": "modbus-write",
+        "z": "d11df81b731273a1",
+        "name": "M3",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "2",
+        "quantity": "1",
+        "server": "f6b85442f83a688f",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 690,
+        "y": 520,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "dd4cdfe4b0abbaaf",
+        "type": "modbus-write",
+        "z": "d11df81b731273a1",
+        "name": "M4",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "3",
+        "quantity": "1",
+        "server": "f6b85442f83a688f",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 610,
+        "y": 620,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "4386db171e196a30",
+        "type": "modbus-write",
+        "z": "d11df81b731273a1",
+        "name": "M5",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "4",
+        "quantity": "1",
+        "server": "f6b85442f83a688f",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 690,
+        "y": 720,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "823b36704d0b12c5",
+        "type": "modbus-write",
+        "z": "d11df81b731273a1",
+        "name": "M6",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "5",
+        "quantity": "1",
+        "server": "f6b85442f83a688f",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 710,
+        "y": 960,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "098a5f71338b3c34",
+        "type": "modbus-write",
+        "z": "d11df81b731273a1",
+        "name": "M7",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "6",
+        "quantity": "1",
+        "server": "f6b85442f83a688f",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 690,
+        "y": 820,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "1b309671dfe99bf8",
+        "type": "modbus-write",
+        "z": "d11df81b731273a1",
+        "name": "M8",
+        "showStatusActivities": false,
+        "showErrors": false,
+        "showWarnings": true,
+        "unitid": "",
+        "dataType": "Coil",
+        "adr": "7",
+        "quantity": "1",
+        "server": "f6b85442f83a688f",
+        "emptyMsgOnFail": false,
+        "keepMsgProperties": false,
+        "delayOnStart": false,
+        "startDelayTime": "",
+        "x": 630,
+        "y": 1140,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "2cb47ee62785729f",
+        "type": "function",
+        "z": "d11df81b731273a1",
+        "name": "function 8",
+        "func": "var code = msg.req.query.code;\n\nif (code == \"0\") {\n    msg.payload = false;\n} else {\n    msg.payload = true;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 1140,
+        "wires": [
+            [
+                "1b309671dfe99bf8"
+            ]
+        ]
+    },
+    {
+        "id": "03bd67fde502e013",
+        "type": "http in",
+        "z": "d11df81b731273a1",
+        "name": "",
+        "url": "/plc8",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 240,
+        "y": 1140,
+        "wires": [
+            [
+                "2cb47ee62785729f"
+            ]
+        ]
+    },
+    {
+        "id": "e0c87d7ab108176b",
+        "type": "debug",
+        "z": "d11df81b731273a1",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "eb0333179db4852d",
+        "type": "debug",
+        "z": "d11df81b731273a1",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "fc20d04e8eed8402",
+        "type": "debug",
+        "z": "d11df81b731273a1",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "5cb754abb2ea6409",
+        "type": "debug",
+        "z": "d11df81b731273a1",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "ea307f8116ca40c5",
+        "type": "watch",
+        "z": "d11df81b731273a1",
+        "name": "test_cam2",
+        "files": "/home/sdsadmin/kaptifi-vision-ppe-deployment/kaptifi-vision-ppe/database/alarms/alarm_cam_2.json,/home/sdsadmin/kaptifi-vision-ppe-deployment/kaptifi-vision-ppe/database/alarms/alarm_cam_3.json",
+        "recursive": "",
+        "x": 140,
+        "y": 360,
+        "wires": [
+            [
+                "3ba8965dea1e6e70",
+                "44291c5eba2a9823"
+            ]
+        ]
+    },
+    {
+        "id": "a4f530d921ac24ab",
+        "type": "watch",
+        "z": "d11df81b731273a1",
+        "name": "test_cam1",
+        "files": "/home/sdsadmin/kaptifi-vision-ppe-deployment/kaptifi-vision-ppe/database/alarms/alarm_cam_1.json,/home/sdsadmin/kaptifi-vision-ppe-deployment/kaptifi-vision-ppe/database/alarms/alarm_cam_10.json",
+        "recursive": "",
+        "x": 140,
+        "y": 240,
+        "wires": [
+            [
+                "b531b95ce705f879",
+                "44291c5eba2a9823"
+            ]
+        ]
+    },
+    {
+        "id": "d9a5cd244580fea9",
+        "type": "watch",
+        "z": "d11df81b731273a1",
+        "name": "test_cam3",
+        "files": "/home/sdsadmin/kaptifi-vision-ppe-deployment/kaptifi-vision-ppe/database/alarms/alarm_cam_4.json,/home/sdsadmin/kaptifi-vision-ppe-deployment/kaptifi-vision-ppe/database/alarms/alarm_cam_5.json",
+        "recursive": "",
+        "x": 120,
+        "y": 480,
+        "wires": [
+            [
+                "c1ba40afb83bc604",
+                "44291c5eba2a9823"
+            ]
+        ]
+    },
+    {
+        "id": "65194c3c7af6e6aa",
+        "type": "watch",
+        "z": "d11df81b731273a1",
+        "name": "test_cam5",
+        "files": "/home/sdsadmin/kaptifi-vision-ppe-deployment/kaptifi-vision-ppe/database/alarms/alarm_cam_8.json,/home/sdsadmin/kaptifi-vision-ppe-deployment/kaptifi-vision-ppe/database/alarms/alarm_cam_9.json",
+        "recursive": "",
+        "x": 120,
+        "y": 700,
+        "wires": [
+            [
+                "5163b88a889a5bca",
+                "44291c5eba2a9823"
+            ]
+        ]
+    },
+    {
+        "id": "4f21aa82146be31c",
+        "type": "debug",
+        "z": "d11df81b731273a1",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "d9401c9bb9502492",
+        "type": "debug",
+        "z": "d11df81b731273a1",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "b531b95ce705f879",
+        "type": "function",
+        "z": "d11df81b731273a1",
+        "name": "function 1",
+        "func": "// Send 'true' immediately\nnode.send({ payload: true });\n\n// Schedule a second message ('false') after 30 seconds\nsetTimeout(() => {\n    node.send({ payload: false });\n}, 30000);\n\n// Return null to prevent additional messages from being sent\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 240,
+        "wires": [
+            [
+                "26c448f915529943",
+                "6bfa21b9e7901281"
+            ]
+        ]
+    },
+    {
+        "id": "3ba8965dea1e6e70",
+        "type": "function",
+        "z": "d11df81b731273a1",
+        "name": "function 2",
+        "func": "// Send 'true' immediately\nnode.send({ payload: true });\n\n// Schedule a second message ('false') after 30 seconds\nsetTimeout(() => {\n    node.send({ payload: false });\n}, 30000);\n\n// Return null to prevent additional messages from being sent\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 360,
+        "wires": [
+            [
+                "e0c87d7ab108176b",
+                "c0a22bb544641c1c"
+            ]
+        ]
+    },
+    {
+        "id": "c1ba40afb83bc604",
+        "type": "function",
+        "z": "d11df81b731273a1",
+        "name": "function 3",
+        "func": "// Send 'true' immediately\nnode.send({ payload: true });\n\n// Schedule a second message ('false') after 30 seconds\nsetTimeout(() => {\n    node.send({ payload: false });\n}, 30000);\n\n// Return null to prevent additional messages from being sent\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 480,
+        "wires": [
+            [
+                "eb0333179db4852d",
+                "5c40c34eaf162bb9"
+            ]
+        ]
+    },
+    {
+        "id": "03f72094ae6b25d1",
+        "type": "function",
+        "z": "d11df81b731273a1",
+        "name": "function 4",
+        "func": "// Send 'true' immediately\nnode.send({ payload: true });\n\n// Schedule a second message ('false') after 30 seconds\nsetTimeout(() => {\n    node.send({ payload: false });\n}, 30000);\n\n// Return null to prevent additional messages from being sent\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 600,
+        "wires": [
+            [
+                "4f21aa82146be31c",
+                "dd4cdfe4b0abbaaf"
+            ]
+        ]
+    },
+    {
+        "id": "5163b88a889a5bca",
+        "type": "function",
+        "z": "d11df81b731273a1",
+        "name": "function 5",
+        "func": "// Send 'true' immediately\nnode.send({ payload: true });\n\n// Schedule a second message ('false') after 30 seconds\nsetTimeout(() => {\n    node.send({ payload: false });\n}, 30000);\n\n// Return null to prevent additional messages from being sent\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 700,
+        "wires": [
+            [
+                "d9401c9bb9502492",
+                "4386db171e196a30"
+            ]
+        ]
+    },
+    {
+        "id": "6a92dfac3f1f0084",
+        "type": "function",
+        "z": "d11df81b731273a1",
+        "name": "function 6",
+        "func": "// Send 'true' immediately\nnode.send({ payload: true });\n\n// Schedule a second message ('false') after 30 seconds\nsetTimeout(() => {\n    node.send({ payload: false });\n}, 30000);\n\n// Return null to prevent additional messages from being sent\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 900,
+        "wires": [
+            [
+                "fc20d04e8eed8402",
+                "823b36704d0b12c5"
+            ]
+        ]
+    },
+    {
+        "id": "3576668e9a6a56e9",
+        "type": "inject",
+        "z": "d11df81b731273a1",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "v": "false",
+                "vt": "bool"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "false",
+        "payloadType": "bool",
+        "x": 950,
+        "y": 580,
+        "wires": [
+            [
+                "26c448f915529943",
+                "c0a22bb544641c1c",
+                "5c40c34eaf162bb9",
+                "dd4cdfe4b0abbaaf",
+                "4386db171e196a30",
+                "823b36704d0b12c5",
+                "098a5f71338b3c34",
+                "6bfa21b9e7901281"
+            ]
+        ]
+    },
+    {
+        "id": "23848cbb37fd445e",
+        "type": "watch",
+        "z": "d11df81b731273a1",
+        "name": "test_cam4",
+        "files": "/home/sdsadmin/kaptifi-vision-ppe-deployment/kaptifi-vision-ppe/database/alarms/alarm_cam_6.json,/home/sdsadmin/kaptifi-vision-ppe-deployment/kaptifi-vision-ppe/database/alarms/alarm_cam_7.json",
+        "recursive": "",
+        "x": 120,
+        "y": 600,
+        "wires": [
+            [
+                "03f72094ae6b25d1",
+                "44291c5eba2a9823"
+            ]
+        ]
+    },
+    {
+        "id": "fb7a279f5259af2e",
+        "type": "watch",
+        "z": "d11df81b731273a1",
+        "name": "test_cam6",
+        "files": "/home/sdsadmin/kaptifi-vision-ppe-deployment/kaptifi-vision-ppe/database/alarms/alarm_cam_11.json,/home/sdsadmin/kaptifi-vision-ppe-deployment/kaptifi-vision-ppe/database/alarms/alarm_cam_12.json",
+        "recursive": "",
+        "x": 100,
+        "y": 880,
+        "wires": [
+            [
+                "6a92dfac3f1f0084",
+                "44291c5eba2a9823"
+            ]
+        ]
+    },
+    {
+        "id": "44291c5eba2a9823",
+        "type": "function",
+        "z": "d11df81b731273a1",
+        "name": "function 9",
+        "func": "// Send 'true' immediately\nnode.send({ payload: true });\n\n// Schedule a second message ('false') after 30 seconds\nsetTimeout(() => {\n    node.send({ payload: false });\n}, 30000);\n\n// Return null to prevent additional messages from being sent\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 800,
+        "wires": [
+            [
+                "5cb754abb2ea6409",
+                "098a5f71338b3c34"
+            ]
+        ]
+    },
+    {
+        "id": "f6b85442f83a688f",
+        "type": "modbus-client",
+        "name": "Logo",
+        "clienttype": "tcp",
+        "bufferCommands": true,
+        "stateLogEnabled": false,
+        "queueLogEnabled": false,
+        "failureLogEnabled": true,
+        "tcpHost": "192.168.184.202",
+        "tcpPort": "502",
+        "tcpType": "DEFAULT",
+        "serialPort": "/dev/ttyUSB",
+        "serialType": "RTU-BUFFERD",
+        "serialBaudrate": "9600",
+        "serialDatabits": "8",
+        "serialStopbits": "1",
+        "serialParity": "none",
+        "serialConnectionDelay": "100",
+        "serialAsciiResponseStartDelimiter": "0x3A",
+        "unit_id": 255,
+        "commandDelay": 1,
+        "clientTimeout": 1000,
+        "reconnectOnTimeout": true,
+        "reconnectTimeout": 2000,
+        "parallelUnitIdsAllowed": true,
+        "showErrors": false,
+        "showWarnings": true,
+        "showLogs": true
+    }
+]

@@ -14,15 +14,37 @@ const initSchema = () => {
       plc_ip_address TEXT NOT NULL,
       plc_port INTEGER NOT NULL
     );
-
-    CREATE TABLE IF NOT EXISTS rules (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      file_path TEXT UNIQUE NOT NULL,
-      coil INTEGER NOT NULL CHECK (coil >= 0 AND coil <= 7),
-      duration INTEGER NOT NULL,
-      enabled INTEGER NOT NULL DEFAULT 1 CHECK (enabled IN (0, 1))
-    );
   `);
+
+  const tableInfo = db.pragma('table_info(rules)');
+  if (tableInfo.length > 0) {
+    const tableDef = db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='rules'").get();
+    if (tableDef && tableDef.sql.includes('UNIQUE')) {
+      console.log('Migrating rules table to drop UNIQUE constraint on file_path...');
+      db.exec(`
+        CREATE TABLE rules_new (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          file_path TEXT NOT NULL,
+          coil INTEGER NOT NULL CHECK (coil >= 0 AND coil <= 7),
+          duration INTEGER NOT NULL,
+          enabled INTEGER NOT NULL DEFAULT 1 CHECK (enabled IN (0, 1))
+        );
+        INSERT INTO rules_new SELECT * FROM rules;
+        DROP TABLE rules;
+        ALTER TABLE rules_new RENAME TO rules;
+      `);
+    }
+  } else {
+    db.exec(`
+      CREATE TABLE rules (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        file_path TEXT NOT NULL,
+        coil INTEGER NOT NULL CHECK (coil >= 0 AND coil <= 7),
+        duration INTEGER NOT NULL,
+        enabled INTEGER NOT NULL DEFAULT 1 CHECK (enabled IN (0, 1))
+      );
+    `);
+  }
 };
 
 initSchema();

@@ -11,6 +11,7 @@ Auto-generated from all feature plans. Last updated: 2026-04-06
 - Transient runtime OS states (Maps for bounding hardware timers) (004-plc-execution)
 - Node.js 20+; Next.js 14+ + `next`, `react`. No styling frameworks (Vanilla CSS). (005-gui-control-panel)
 - N/A for this phase. (005-gui-control-panel)
+- Node.js & React (Next.js) + Next.js App Router, Express, SQLite (007-frontend-config)
 
 - Node.js 20+ + `express` (HTTP API), `better-sqlite3` (Database), `modbus-serial` (PLC Communication) (001-core-infrastructure)
 
@@ -31,9 +32,9 @@ tests/
 Node.js 20+: Follow standard conventions
 
 ## Recent Changes
+- 007-frontend-config: Added Node.js & React (Next.js) + Next.js App Router, Express, SQLite
 - 006-restart-recovery: Added Node.js 20+ + `modbus-serial`
 - 005-gui-control-panel: Added Node.js 20+; Next.js 14+ + `next`, `react`. No styling frameworks (Vanilla CSS).
-- 004-plc-execution: Added Node.js 20+ + `modbus-serial` (already integrated into Phase 1)
 
 
 <!-- MANUAL ADDITIONS START -->

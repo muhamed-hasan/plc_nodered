@@ -11,14 +11,16 @@ class WatcherService {
 
   init() {
     this.rulesList = Rules.getAll().filter(r => r.enabled === 1);
-    const paths = this.rulesList.map(r => r.file_path);
+    const paths = Array.from(new Set(
+      this.rulesList.flatMap(r => r.file_path.split(',').map(p => p.trim()))
+    ));
     
     this.watcher = chokidar.watch(paths, { persistent: true });
 
     this.watcher.on('add', (path) => this.handleRawEvent(path, 'add'));
     this.watcher.on('change', (path) => this.handleRawEvent(path, 'change'));
     
-    console.log(`Watcher initialized for ${paths.length} enabled paths.`);
+    console.log(`Watcher initialized for ${paths.length} enabled unique paths.`);
   }
 
   handleRawEvent(path, eventType) {
@@ -35,21 +37,23 @@ class WatcherService {
   }
 
   resolveEvent(path) {
-    const rule = this.rulesList.find(r => r.file_path === path);
-    if (!rule) return;
+    const triggeredRules = this.rulesList.filter(r => r.file_path.split(',').map(p => p.trim()).includes(path));
+    if (triggeredRules.length === 0) return;
 
-    const eventPayload = {
-      rule_id: rule.id,
-      file_path: rule.file_path,
-      coil: rule.coil,
-      duration: rule.duration,
-      timestamp: Date.now()
-    };
+    for (const rule of triggeredRules) {
+      const eventPayload = {
+        rule_id: rule.id,
+        file_path: rule.file_path,
+        coil: rule.coil,
+        duration: rule.duration,
+        timestamp: Date.now()
+      };
 
-    eventBus.emit('fileTriggered', eventPayload);
-    const msg = `[Watch Event] Path: ${path} | Target Coil: ${rule.coil} | Duration: ${rule.duration}ms`;
-    console.log(`${msg} | Timestamp: ${eventPayload.timestamp}`);
-    eventBus.emit('log', { timestamp: Date.now(), type: 'INFO', message: msg });
+      eventBus.emit('fileTriggered', eventPayload);
+      const msg = `[Watch Event] Path: ${path} | Target Coil: ${rule.coil} | Duration: ${rule.duration}ms`;
+      console.log(`${msg} | Timestamp: ${eventPayload.timestamp}`);
+      eventBus.emit('log', { timestamp: Date.now(), type: 'INFO', message: msg });
+    }
   }
 }
 
