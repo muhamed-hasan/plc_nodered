@@ -24,7 +24,13 @@ function WritePanel() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const data = await res.json();
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (err) {
+        data = { error: `Server error: ${res.status} ${res.statusText} (Response: ${text.substring(0, 50)}...)` };
+      }
       setResult({ ok: res.ok, data });
     } catch (e) {
       setResult({ ok: false, data: { error: e.message } });
@@ -110,7 +116,13 @@ function ReadPanel() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ dataType, address: Number(address), quantity: Number(quantity) }),
       });
-      const data = await res.json();
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (err) {
+        data = { error: `Server error: ${res.status} ${res.statusText} (Response: ${text.substring(0, 50)}...)` };
+      }
       setResult({ ok: res.ok, data, ts: Date.now() });
     } catch (e) {
       setResult({ ok: false, data: { error: e.message }, ts: Date.now() });
@@ -217,8 +229,13 @@ function CoilControl() {
       if (res.ok) {
         setCoils((prev) => { const c = [...prev]; c[index] = targetState; return c; });
       } else {
-        const err = await res.json();
-        alert(err.error || "Failed to write coil.");
+        const text = await res.text();
+        try {
+          const err = JSON.parse(text);
+          alert(err.error || "Failed to write coil.");
+        } catch (err) {
+          alert(`Server error: ${res.status} ${res.statusText} (Response: ${text.substring(0, 50)}...)`);
+        }
       }
     } catch (e) {
       alert(e.message);

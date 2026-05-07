@@ -39,9 +39,9 @@ router.post('/write', async (req, res) => {
       return res.json({ success: true, dataType, address, value: intVal, timestamp });
     }
   } catch (error) {
-    const msg = `[Debug Write] Error: ${error.message}`;
+    const msg = `[Debug Write] Error: ${error?.message || error}`;
     eventBus.emit('log', { timestamp: Date.now(), type: 'ERROR', message: msg });
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error?.message || String(error) });
   }
 });
 
@@ -78,9 +78,9 @@ router.post('/read', async (req, res) => {
 
     return res.json({ success: true, dataType, address, quantity, data, timestamp });
   } catch (error) {
-    const msg = `[Debug Read] Error: ${error.message}`;
+    const msg = `[Debug Read] Error: ${error?.message || error}`;
     eventBus.emit('log', { timestamp: Date.now(), type: 'ERROR', message: msg });
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error?.message || String(error) });
   }
 });
 
