@@ -26,8 +26,8 @@ router.post('/coil/:id', async (req, res) => {
     
     return res.status(200).json({ success: true, coil: coilId, state });
   } catch (error) {
-    console.error(`[Manual Override] Failed writing to coil ${req.params.id}:`, error.message);
-    return res.status(500).json({ error: error.message });
+    console.error(`[Manual Override] Failed writing to coil ${req.params.id}:`, error?.message || error);
+    return res.status(500).json({ error: error?.message || String(error) });
   }
 });
 
