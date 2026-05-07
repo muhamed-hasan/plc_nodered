@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs');
 const Rules = require('../models/rules');
 
 const router = express.Router();
@@ -12,6 +13,30 @@ router.get('/', (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+// POST /api/rules/validate-path — check if file paths exist on disk
+router.post('/validate-path', (req, res) => {
+  const { file_path } = req.body;
+  if (!file_path || typeof file_path !== 'string') {
+    return res.status(400).json({ error: 'file_path is required.' });
+  }
+
+  const paths = file_path.split(',').map(p => p.trim()).filter(Boolean);
+  const results = paths.map(p => {
+    try {
+      const exists = fs.existsSync(p);
+      const isFile = exists ? fs.statSync(p).isFile() : false;
+      return { path: p, exists, isFile, valid: exists && isFile };
+    } catch {
+      return { path: p, exists: false, isFile: false, valid: false };
+    }
+  });
+
+  const allValid = results.every(r => r.valid);
+  res.json({ valid: allValid, paths: results });
+});
+
+
 
 router.post('/', (req, res) => {
   const { file_path, coil, duration, enabled } = req.body;

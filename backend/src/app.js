@@ -11,12 +11,15 @@ const settingsRoutes = require('./api/settings');
 const rulesRoutes = require('./api/rules');
 const manualRoutes = require('./api/manual');
 const logsRoutes = require('./api/logs');
+const debugRoutes = require('./api/debug');
 
-// Routes will be mounted here
+// Routes
 app.use('/api/settings', settingsRoutes);
 app.use('/api/rules', rulesRoutes);
 app.use('/api/manual', manualRoutes);
 app.use('/api/logs', logsRoutes);
+app.use('/api/debug', debugRoutes);
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

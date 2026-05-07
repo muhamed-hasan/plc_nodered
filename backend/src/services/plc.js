@@ -4,22 +4,27 @@ const eventBus = require('./eventBus');
 const client = new ModbusRTU();
 let isConnected = false;
 let connectRetryTimeout = null;
+let currentIp = null;
+let currentPort = null;
 
 class PLCService {
   /**
    * Connect to the Modbus TCP PLC
-   * @param {string} ip 
-   * @param {number} port 
+   * @param {string} ip
+   * @param {number} port
    */
   static async connect(ip, port) {
     if (this.connectRetryTimeout) {
       clearTimeout(this.connectRetryTimeout);
     }
-    
+
     // Attempt closing existing connection if connected
     if (isConnected) {
       this.disconnect();
     }
+
+    currentIp = ip;
+    currentPort = port;
 
     try {
       console.log(`Connecting to PLC at ${ip}:${port}...`);
@@ -34,7 +39,7 @@ class PLCService {
       const msg = `Failed to connect to PLC: ${error.message}. Retrying in 5s...`;
       console.error(msg);
       eventBus.emit('log', { timestamp: Date.now(), type: 'WARN', message: msg });
-      
+
       // Retry in 5 seconds
       this.connectRetryTimeout = setTimeout(() => {
         this.connect(ip, port);
@@ -57,9 +62,17 @@ class PLCService {
   static isConnected() {
     return isConnected;
   }
-  
+
   static getClient() {
     return client;
+  }
+
+  static getStatus() {
+    return {
+      connected: isConnected,
+      ip: currentIp,
+      port: currentPort,
+    };
   }
 }
 
@@ -81,3 +94,4 @@ client.on('close', () => {
 });
 
 module.exports = PLCService;
+
