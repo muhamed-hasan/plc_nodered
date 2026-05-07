@@ -11,23 +11,29 @@ export default function Navigation() {
         plcVision.
       </div>
       <nav className="nav-menu">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className={`nav-link ${pathname === '/' ? 'active' : ''}`}
         >
           Dashboard
         </Link>
-        <Link 
-          href="/rules" 
+        <Link
+          href="/rules"
           className={`nav-link ${pathname?.startsWith('/rules') ? 'active' : ''}`}
         >
           Rules Engine
         </Link>
-        <Link 
-          href="/settings" 
+        <Link
+          href="/debug"
+          className={`nav-link ${pathname?.startsWith('/debug') ? 'active' : ''}`}
+        >
+          Debug Console
+        </Link>
+        <Link
+          href="/settings"
           className={`nav-link ${pathname?.startsWith('/settings') ? 'active' : ''}`}
         >
-          Hardware Settings
+          PLC Settings
         </Link>
       </nav>
     </aside>
