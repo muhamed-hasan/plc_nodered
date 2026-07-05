@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 export default function SettingsPage() {
-  const [settings, setSettings] = useState({ plc_ip_address: "", plc_port: 502 });
+  const [settings, setSettings] = useState({ plc_ip_address: "", plc_port: 502, plc_unit_id: 255 });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [testing, setTesting] = useState(false);
@@ -22,7 +22,11 @@ export default function SettingsPage() {
       .then((res) => res.json())
       .then((data) => {
         if (data.plc_ip_address) {
-          setSettings({ plc_ip_address: data.plc_ip_address, plc_port: data.plc_port || 502 });
+          setSettings({
+            plc_ip_address: data.plc_ip_address,
+            plc_port: data.plc_port || 502,
+            plc_unit_id: data.plc_unit_id !== undefined ? data.plc_unit_id : 255
+          });
         }
         setLoading(false);
       })
@@ -43,6 +47,7 @@ export default function SettingsPage() {
         body: JSON.stringify({
           plc_ip_address: settings.plc_ip_address,
           plc_port: Number(settings.plc_port),
+          plc_unit_id: Number(settings.plc_unit_id),
         }),
       });
       const data = await res.json();
@@ -67,6 +72,7 @@ export default function SettingsPage() {
         body: JSON.stringify({
           plc_ip_address: settings.plc_ip_address,
           plc_port: Number(settings.plc_port),
+          plc_unit_id: Number(settings.plc_unit_id),
         }),
       });
       if (res.ok) {
@@ -132,6 +138,21 @@ export default function SettingsPage() {
                 placeholder="502"
                 value={settings.plc_port}
                 onChange={(e) => setSettings({ ...settings, plc_port: e.target.value })}
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label" htmlFor="unit_id">Modbus Unit ID</label>
+              <input
+                id="unit_id"
+                type="number"
+                required
+                min={0}
+                max={255}
+                className="form-input"
+                placeholder="255"
+                value={settings.plc_unit_id}
+                onChange={(e) => setSettings({ ...settings, plc_unit_id: e.target.value })}
               />
             </div>
 

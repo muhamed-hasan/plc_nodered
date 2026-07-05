@@ -12,9 +12,16 @@ const initSchema = () => {
     CREATE TABLE IF NOT EXISTS settings (
       id INTEGER PRIMARY KEY CHECK (id = 1),
       plc_ip_address TEXT NOT NULL,
-      plc_port INTEGER NOT NULL
+      plc_port INTEGER NOT NULL,
+      plc_unit_id INTEGER NOT NULL DEFAULT 255
     );
   `);
+
+  const settingsInfo = db.pragma('table_info(settings)');
+  const hasUnitId = settingsInfo.some(col => col.name === 'plc_unit_id');
+  if (!hasUnitId) {
+    db.exec('ALTER TABLE settings ADD COLUMN plc_unit_id INTEGER NOT NULL DEFAULT 255');
+  }
 
   const tableInfo = db.pragma('table_info(rules)');
   if (tableInfo.length > 0) {

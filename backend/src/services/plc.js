@@ -6,14 +6,16 @@ let isConnected = false;
 let connectRetryTimeout = null;
 let currentIp = null;
 let currentPort = null;
+let currentUnitId = 255;
 
 class PLCService {
   /**
    * Connect to the Modbus TCP PLC
    * @param {string} ip
    * @param {number} port
+   * @param {number} unitId
    */
-  static async connect(ip, port) {
+  static async connect(ip, port, unitId = 255) {
     if (this.connectRetryTimeout) {
       clearTimeout(this.connectRetryTimeout);
     }
@@ -25,13 +27,37 @@ class PLCService {
 
     currentIp = ip;
     currentPort = port;
+    currentUnitId = unitId;
 
     try {
-      console.log(`Connecting to PLC at ${ip}:${port}...`);
+      console.log(`Connecting to PLC at ${ip}:${port} (Unit ID: ${unitId})...`);
       await client.connectTCP(ip, { port });
-      client.setID(1); // Default Modbus Unit ID
+      client.setID(unitId);
       isConnected = true;
-      const msg = `Successfully connected to PLC at ${ip}:${port}.`;
+
+      if (client._port && client._port._client) {
+        const socket = client._port._client;
+        socket.on('error', (err) => {
+          const msg = `PLC socket error: ${err.message}`;
+          console.error(msg);
+          eventBus.emit('log', { timestamp: Date.now(), type: 'ERROR', message: msg });
+          if (isConnected) {
+            isConnected = false;
+            PLCService.triggerReconnect();
+          }
+        });
+        socket.on('close', () => {
+          if (isConnected) {
+            const msg = 'PLC socket closed unexpectedly. Retrying in 5s...';
+            console.warn(msg);
+            eventBus.emit('log', { timestamp: Date.now(), type: 'ERROR', message: msg });
+            isConnected = false;
+            PLCService.triggerReconnect();
+          }
+        });
+      }
+
+      const msg = `Successfully connected to PLC at ${ip}:${port} (Unit ID: ${unitId}).`;
       console.log(msg);
       eventBus.emit('log', { timestamp: Date.now(), type: 'INFO', message: msg });
     } catch (error) {
@@ -42,7 +68,7 @@ class PLCService {
 
       // Retry in 5 seconds
       this.connectRetryTimeout = setTimeout(() => {
-        this.connect(ip, port);
+        this.connect(ip, port, unitId);
       }, 5000);
     }
   }
@@ -60,7 +86,7 @@ class PLCService {
   }
 
   static isConnected() {
-    return isConnected;
+    return isConnected && client.isOpen;
   }
 
   static getClient() {
@@ -69,10 +95,23 @@ class PLCService {
 
   static getStatus() {
     return {
-      connected: isConnected,
+      connected: this.isConnected(),
       ip: currentIp,
       port: currentPort,
+      unit_id: currentUnitId,
     };
+  }
+
+  static triggerReconnect() {
+    if (this.connectRetryTimeout) {
+      clearTimeout(this.connectRetryTimeout);
+    }
+    this.connectRetryTimeout = setTimeout(() => {
+      if (currentIp && currentPort) {
+        console.log(`Attempting automatic PLC reconnection to ${currentIp}:${currentPort}...`);
+        this.connect(currentIp, currentPort, currentUnitId);
+      }
+    }, 5000);
   }
 }
 
@@ -81,16 +120,22 @@ client.on('error', (err) => {
   const msg = `PLC connection error: ${err.message}`;
   console.error(msg);
   eventBus.emit('log', { timestamp: Date.now(), type: 'ERROR', message: msg });
-  isConnected = false;
+  if (isConnected) {
+    isConnected = false;
+    PLCService.triggerReconnect();
+  }
 });
 
 client.on('close', () => {
   if (isConnected) {
-    const msg = 'PLC connection closed unexpectedly.';
+    const msg = 'PLC connection closed unexpectedly. Retrying in 5s...';
     console.warn(msg);
     eventBus.emit('log', { timestamp: Date.now(), type: 'ERROR', message: msg });
+    isConnected = false;
+    PLCService.triggerReconnect();
+  } else {
+    isConnected = false;
   }
-  isConnected = false;
 });
 
 module.exports = PLCService;

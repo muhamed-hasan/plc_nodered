@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const Rules = require('../models/rules');
+const watcherService = require('../services/watcher');
 
 const router = express.Router();
 
@@ -57,6 +58,7 @@ router.post('/', (req, res) => {
 
   try {
     const rule = Rules.create({ file_path, coil, duration, enabled: enabledVal });
+    watcherService.reload();
     res.status(201).json({ success: true, data: rule });
   } catch (error) {
     console.error('Error creating rule:', error);
@@ -98,6 +100,7 @@ router.put('/:id', (req, res) => {
     if (!updatedRule) {
       return res.status(404).json({ error: 'Rule not found.' });
     }
+    watcherService.reload();
     res.status(200).json({ success: true, data: updatedRule });
   } catch (error) {
     console.error('Error updating rule:', error);
@@ -119,6 +122,7 @@ router.delete('/:id', (req, res) => {
       // But spec says "success: true, message: Rule 2 deleted". Let's handle generic success if deleted.
       return res.status(404).json({ error: 'Rule not found.' });
     }
+    watcherService.reload();
     res.status(200).json({ success: true, message: `Rule ${id} deleted.` });
   } catch (error) {
     console.error('Error deleting rule:', error);

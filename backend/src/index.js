@@ -1,3 +1,10 @@
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 const app = require('./app');
 const Settings = require('./models/settings');
 const PLCService = require('./services/plc');
@@ -16,7 +23,7 @@ app.listen(PORT, () => {
   };
 
   if (settings && settings.plc_ip_address && settings.plc_port) {
-    PLCService.connect(settings.plc_ip_address, settings.plc_port)
+    PLCService.connect(settings.plc_ip_address, settings.plc_port, settings.plc_unit_id)
       .then(() => {
         console.log('Synchronous hardware boot bounds evaluated.');
       })

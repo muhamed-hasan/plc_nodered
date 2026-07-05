@@ -23,6 +23,13 @@ class WatcherService {
     console.log(`Watcher initialized for ${paths.length} enabled unique paths.`);
   }
 
+  async reload() {
+    if (this.watcher) {
+      await this.watcher.close();
+    }
+    this.init();
+  }
+
   handleRawEvent(path, eventType) {
     if (this.debounceTimers.has(path)) {
       clearTimeout(this.debounceTimers.get(path));
