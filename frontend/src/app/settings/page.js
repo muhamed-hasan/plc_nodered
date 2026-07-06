@@ -10,6 +10,19 @@ export default function SettingsPage() {
   const [testResult, setTestResult] = useState(null);
   const [plcStatus, setPlcStatus] = useState(null);
 
+  const [licenseKey, setLicenseKey] = useState("");
+  const [licenseEmail, setLicenseEmail] = useState("");
+  const [updatingLicense, setUpdatingLicense] = useState(false);
+  const [licenseMsg, setLicenseMsg] = useState(null);
+  const [licenseInfo, setLicenseInfo] = useState(null);
+
+  const fetchLicenseStatus = useCallback(async () => {
+    try {
+      const res = await fetch("/api/license/status");
+      if (res.ok) setLicenseInfo(await res.json());
+    } catch (_) {}
+  }, []);
+
   const fetchStatus = useCallback(async () => {
     try {
       const res = await fetch("/api/settings/status");
@@ -33,9 +46,13 @@ export default function SettingsPage() {
       .catch(() => setLoading(false));
 
     fetchStatus();
-    const interval = setInterval(fetchStatus, 5000);
+    fetchLicenseStatus();
+    const interval = setInterval(() => {
+      fetchStatus();
+      fetchLicenseStatus();
+    }, 5000);
     return () => clearInterval(interval);
-  }, [fetchStatus]);
+  }, [fetchStatus, fetchLicenseStatus]);
 
   const handleTest = async () => {
     setTesting(true);
@@ -86,6 +103,61 @@ export default function SettingsPage() {
       setMessage({ type: "error", text: "Network error — could not reach backend." });
     }
     setSaving(false);
+  };
+
+  const handleLicenseUpdate = async (e) => {
+    e.preventDefault();
+    if (!licenseKey.trim() || !licenseEmail.trim()) return;
+    setUpdatingLicense(true);
+    setLicenseMsg(null);
+
+    try {
+      const res = await fetch("/api/license/activate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: licenseKey.trim(), email: licenseEmail.trim() })
+      });
+      const data = await res.json();
+
+      if (data.status === "active") {
+        setLicenseMsg({ type: "success", text: "License successfully updated and validated." });
+        setLicenseKey("");
+        setLicenseEmail("");
+        fetchLicenseStatus();
+      } else {
+        const messages = {
+          blocked: "This license has been blocked.",
+          expired: "This license is expired.",
+          device_mismatch: "This license is bound to another device.",
+          invalid: "Invalid license key.",
+          server_error: "Could not connect to license server."
+        };
+        setLicenseMsg({ type: "error", text: messages[data.status] || "License update failed." });
+      }
+    } catch (e) {
+      setLicenseMsg({ type: "error", text: "Network error occurred." });
+    } finally {
+      setUpdatingLicense(false);
+    }
+  };
+
+  const handleDeactivate = async () => {
+    if (!confirm("Are you sure you want to deactivate the system? This will disconnect the PLC and lock the dashboard.")) return;
+    setUpdatingLicense(true);
+    setLicenseMsg(null);
+
+    try {
+      const res = await fetch("/api/license/deactivate", { method: "POST" });
+      if (res.ok) {
+        window.location.reload();
+      } else {
+        setLicenseMsg({ type: "error", text: "Failed to deactivate license." });
+      }
+    } catch (e) {
+      setLicenseMsg({ type: "error", text: "Network error occurred." });
+    } finally {
+      setUpdatingLicense(false);
+    }
   };
 
   const statusClass = plcStatus?.connected ? "online" : plcStatus ? "offline" : "unknown";
@@ -183,6 +255,90 @@ export default function SettingsPage() {
             </div>
           </form>
         )}
+      </div>
+
+      {/* License Configuration Card */}
+      <div className="glass-card" style={{ marginTop: "1.5rem" }}>
+        <h2 style={{ marginBottom: "0.75rem", fontSize: "1.1rem" }}>License Configuration</h2>
+        <p style={{ color: "var(--text-muted)", marginBottom: "1.5rem", fontSize: "0.9rem" }}>
+          View and manage the active license key for this system.
+        </p>
+
+        {licenseInfo && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", fontSize: "0.9rem", marginBottom: "1.5rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid var(--border-color)", paddingBottom: "0.5rem" }}>
+              <span style={{ color: "var(--text-muted)" }}>Current Key:</span>
+              <span style={{ fontFamily: "monospace", fontWeight: "600" }}>{licenseInfo.key || "—"}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid var(--border-color)", paddingBottom: "0.5rem" }}>
+              <span style={{ color: "var(--text-muted)" }}>Registered Email:</span>
+              <span>{licenseInfo.email || "—"}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid var(--border-color)", paddingBottom: "0.5rem" }}>
+              <span style={{ color: "var(--text-muted)" }}>Status:</span>
+              <span style={{
+                color: licenseInfo.status === "active" ? "var(--success)" : "var(--danger)",
+                fontWeight: "600",
+                textTransform: "capitalize"
+              }}>
+                {licenseInfo.status}
+              </span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid var(--border-color)", paddingBottom: "0.5rem" }}>
+              <span style={{ color: "var(--text-muted)" }}>Expiry Date:</span>
+              <span>{licenseInfo.expire || "—"}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", paddingBottom: "0.5rem" }}>
+              <span style={{ color: "var(--text-muted)" }}>Remaining Days:</span>
+              <span style={{ fontVariantNumeric: "tabular-nums" }}>{licenseInfo.remaining_days !== undefined ? licenseInfo.remaining_days : "—"}</span>
+            </div>
+          </div>
+        )}
+
+        <form onSubmit={handleLicenseUpdate}>
+          <div className="form-group">
+            <label className="form-label" htmlFor="newLicenseEmail">Registered Email</label>
+            <input
+              id="newLicenseEmail"
+              type="email"
+              required
+              className="form-input"
+              placeholder="e.g. client@example.com"
+              value={licenseEmail}
+              onChange={(e) => setLicenseEmail(e.target.value)}
+              disabled={updatingLicense}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="newLicenseKey">Change License Key</label>
+            <input
+              id="newLicenseKey"
+              type="text"
+              required
+              className="form-input"
+              placeholder="Enter new license key"
+              value={licenseKey}
+              onChange={(e) => setLicenseKey(e.target.value)}
+              disabled={updatingLicense}
+            />
+          </div>
+
+          {licenseMsg && (
+            <div className={`alert ${licenseMsg.type === "error" ? "alert-error" : "alert-success"}`} style={{ marginBottom: "1rem" }}>
+              {licenseMsg.text}
+            </div>
+          )}
+
+          <div style={{ display: "flex", gap: "0.75rem" }}>
+            <button type="submit" className="btn btn-primary" disabled={updatingLicense || !licenseKey.trim() || !licenseEmail.trim()}>
+              {updatingLicense ? "Updating..." : "Update License Key"}
+            </button>
+            <button type="button" className="btn btn-danger" onClick={handleDeactivate} disabled={updatingLicense}>
+              Deactivate System
+            </button>
+          </div>
+        </form>
       </div>
 
       <div className="glass-card" style={{ marginTop: "1.5rem" }}>

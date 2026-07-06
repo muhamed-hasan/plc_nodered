@@ -7,6 +7,13 @@ router.post('/coil/:id', async (req, res) => {
     const coilId = parseInt(req.params.id, 10);
     const { state } = req.body;
     
+    // Check license status
+    const LicenseManager = require('../services/licenseManager');
+    const licenseStatus = LicenseManager.getStatus();
+    if (licenseStatus.status !== 'active') {
+      return res.status(403).json({ error: `Manual override blocked: License is not active (${licenseStatus.status})` });
+    }
+    
     if (isNaN(coilId) || coilId < 0 || coilId > 7) {
       return res.status(400).json({ error: 'Invalid coil ID. Must be integer 0-7.' });
     }

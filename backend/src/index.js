@@ -8,6 +8,7 @@ process.on('unhandledRejection', (reason, promise) => {
 const app = require('./app');
 const Settings = require('./models/settings');
 const PLCService = require('./services/plc');
+const LicenseManager = require('./services/licenseManager');
 
 const PORT = process.env.PORT || 3001;
 
@@ -17,6 +18,10 @@ app.listen(PORT, () => {
   const executorService = require('./services/executor');
   const watcherService = require('./services/watcher');
   const settings = Settings.get();
+  const licenseStatus = LicenseManager.getStatus();
+
+  // Start periodic license validation checks
+  LicenseManager.startPeriodicCheck();
 
   const bootServices = () => {
     watcherService.init();

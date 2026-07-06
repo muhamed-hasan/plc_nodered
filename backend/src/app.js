@@ -12,6 +12,7 @@ const rulesRoutes = require('./api/rules');
 const manualRoutes = require('./api/manual');
 const logsRoutes = require('./api/logs');
 const debugRoutes = require('./api/debug');
+const licenseRoutes = require('./api/license');
 
 // Routes
 app.use('/api/settings', settingsRoutes);
@@ -19,6 +20,7 @@ app.use('/api/rules', rulesRoutes);
 app.use('/api/manual', manualRoutes);
 app.use('/api/logs', logsRoutes);
 app.use('/api/debug', debugRoutes);
+app.use('/api/license', licenseRoutes);
 
 
 // Error handling middleware

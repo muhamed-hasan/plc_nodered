@@ -4,3 +4,6 @@ build/
 *.log
 .env*
 plc_vision.db
+licence_demo/
+plc_vision.db-shm
+plc_vision.db-wal

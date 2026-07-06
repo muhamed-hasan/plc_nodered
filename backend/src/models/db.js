@@ -15,12 +15,28 @@ const initSchema = () => {
       plc_port INTEGER NOT NULL,
       plc_unit_id INTEGER NOT NULL DEFAULT 255
     );
+
+    CREATE TABLE IF NOT EXISTS license (
+      id INTEGER PRIMARY KEY CHECK (id = 1),
+      key TEXT NOT NULL,
+      email TEXT NOT NULL,
+      device_id TEXT NOT NULL,
+      expire TEXT NOT NULL,
+      signature TEXT NOT NULL,
+      last_check INTEGER NOT NULL
+    );
   `);
 
   const settingsInfo = db.pragma('table_info(settings)');
   const hasUnitId = settingsInfo.some(col => col.name === 'plc_unit_id');
   if (!hasUnitId) {
     db.exec('ALTER TABLE settings ADD COLUMN plc_unit_id INTEGER NOT NULL DEFAULT 255');
+  }
+
+  const licenseInfo = db.pragma('table_info(license)');
+  const hasEmail = licenseInfo.some(col => col.name === 'email');
+  if (!hasEmail) {
+    db.exec("ALTER TABLE license ADD COLUMN email TEXT NOT NULL DEFAULT ''");
   }
 
   const tableInfo = db.pragma('table_info(rules)');

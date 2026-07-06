@@ -10,22 +10,35 @@ class WatcherService {
   }
 
   init() {
-    this.rulesList = Rules.getAll().filter(r => r.enabled === 1);
+    const LicenseManager = require('./licenseManager');
+    const licenseStatus = LicenseManager.getStatus();
+
+    if (licenseStatus.status !== 'active') {
+      console.warn('[Watcher] License is not active. Rules file watching is disabled.');
+      this.rulesList = [];
+    } else {
+      this.rulesList = Rules.getAll().filter(r => r.enabled === 1);
+    }
+
     const paths = Array.from(new Set(
       this.rulesList.flatMap(r => r.file_path.split(',').map(p => p.trim()))
     ));
     
-    this.watcher = chokidar.watch(paths, { persistent: true });
-
-    this.watcher.on('add', (path) => this.handleRawEvent(path, 'add'));
-    this.watcher.on('change', (path) => this.handleRawEvent(path, 'change'));
-    
-    console.log(`Watcher initialized for ${paths.length} enabled unique paths.`);
+    if (paths.length > 0) {
+      this.watcher = chokidar.watch(paths, { persistent: true });
+      this.watcher.on('add', (path) => this.handleRawEvent(path, 'add'));
+      this.watcher.on('change', (path) => this.handleRawEvent(path, 'change'));
+      console.log(`Watcher initialized for ${paths.length} enabled unique paths.`);
+    } else {
+      console.log('[Watcher] No paths to watch (rules disabled or license inactive).');
+      this.watcher = null;
+    }
   }
 
   async reload() {
     if (this.watcher) {
       await this.watcher.close();
+      this.watcher = null;
     }
     this.init();
   }

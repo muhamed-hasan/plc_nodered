@@ -1,5 +1,6 @@
 import "./globals.css";
 import Navigation from "../components/Navigation";
+import LicenseGate from "../components/LicenseGate";
 
 export const metadata = {
   title: "PLC Vision Control | Dashboard",
@@ -10,12 +11,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <div className="app-container">
-          <Navigation />
-          <main className="main-content">
-            {children}
-          </main>
-        </div>
+        <LicenseGate>
+          <div className="app-container">
+            <Navigation />
+            <main className="main-content">
+              {children}
+            </main>
+          </div>
+        </LicenseGate>
       </body>
     </html>
   );

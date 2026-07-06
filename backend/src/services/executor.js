@@ -1,5 +1,6 @@
 const eventBus = require('./eventBus');
 const PLCService = require('./plc');
+const LicenseManager = require('./licenseManager');
 
 class ExecutorService {
   constructor() {
@@ -18,6 +19,15 @@ class ExecutorService {
   handleFileTrigger(payload) {
     const { coil, duration } = payload;
     
+    // Check license status
+    const licenseStatus = LicenseManager.getStatus();
+    if (licenseStatus.status !== 'active') {
+      const msg = `[Executor] Blocked trigger on coil ${coil}: License is not active (${licenseStatus.status})`;
+      console.warn(msg);
+      eventBus.emit('log', { timestamp: Date.now(), type: 'WARN', message: msg });
+      return;
+    }
+
     try {
       const isDuplicate = this.executionMap.has(coil);
 
