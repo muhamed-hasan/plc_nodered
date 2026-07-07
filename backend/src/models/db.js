@@ -13,7 +13,8 @@ const initSchema = () => {
       id INTEGER PRIMARY KEY CHECK (id = 1),
       plc_ip_address TEXT NOT NULL,
       plc_port INTEGER NOT NULL,
-      plc_unit_id INTEGER NOT NULL DEFAULT 255
+      plc_unit_id INTEGER NOT NULL DEFAULT 255,
+      last_observed_time INTEGER DEFAULT 0
     );
 
     CREATE TABLE IF NOT EXISTS license (
@@ -23,7 +24,8 @@ const initSchema = () => {
       device_id TEXT NOT NULL,
       expire TEXT NOT NULL,
       signature TEXT NOT NULL,
-      last_check INTEGER NOT NULL
+      last_check INTEGER NOT NULL,
+      local_signature TEXT
     );
   `);
 
@@ -32,11 +34,19 @@ const initSchema = () => {
   if (!hasUnitId) {
     db.exec('ALTER TABLE settings ADD COLUMN plc_unit_id INTEGER NOT NULL DEFAULT 255');
   }
+  const hasLastObserved = settingsInfo.some(col => col.name === 'last_observed_time');
+  if (!hasLastObserved) {
+    db.exec('ALTER TABLE settings ADD COLUMN last_observed_time INTEGER DEFAULT 0');
+  }
 
   const licenseInfo = db.pragma('table_info(license)');
   const hasEmail = licenseInfo.some(col => col.name === 'email');
   if (!hasEmail) {
     db.exec("ALTER TABLE license ADD COLUMN email TEXT NOT NULL DEFAULT ''");
+  }
+  const hasLocalSignature = licenseInfo.some(col => col.name === 'local_signature');
+  if (!hasLocalSignature) {
+    db.exec("ALTER TABLE license ADD COLUMN local_signature TEXT");
   }
 
   const tableInfo = db.pragma('table_info(rules)');

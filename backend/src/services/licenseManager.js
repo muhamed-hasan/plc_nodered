@@ -3,10 +3,23 @@ const License = require('../models/license');
 const PLCService = require('./plc');
 const getDeviceId = require('./device');
 
-const SECRET = 'MY_SECRET_KEY_123';
+// 'MY_SECRET_KEY_123' obfuscated as char codes to avoid plain text strings in source searches
+const SECRET_CODES = [77, 89, 95, 83, 69, 67, 82, 69, 84, 95, 75, 69, 89, 95, 49, 50, 51];
+const SECRET = String.fromCharCode(...SECRET_CODES);
+
 const SERVER_URL_ACTIVATE = 'https://industry-run.com/licence/activate.php';
 const SERVER_URL_CHECK = 'https://industry-run.com/licence/check.php';
 const GRACE_PERIOD = 7 * 24 * 60 * 60; // 7 days in seconds
+
+// Local signature salt to sign last_check metadata
+const LOCAL_SALT = 'LOCAL_SALT_PROTECTION_KEY_987';
+
+function generateLocalCheckSignature(lastCheckTime, deviceId) {
+  return crypto
+    .createHmac('sha256', deviceId + LOCAL_SALT)
+    .update(String(lastCheckTime))
+    .digest('hex');
+}
 
 class LicenseManager {
   static getStatus() {
@@ -15,7 +28,7 @@ class LicenseManager {
       return { status: 'not_activated', message: 'No license found.' };
     }
 
-    // Verify signature
+    // Verify server signature
     const payload = JSON.stringify({
       key: lic.key,
       email: lic.email,
@@ -31,7 +44,30 @@ class LicenseManager {
       return { status: 'tampered', message: 'License signature invalid.' };
     }
 
+    // Verify local database signature to prevent last_check manipulation
+    if (lic.last_check) {
+      const localSign = generateLocalCheckSignature(lic.last_check, lic.device_id);
+      if (localSign !== lic.local_signature) {
+        return { status: 'tampered', message: 'License metadata tampered.' };
+      }
+    }
+
+    // Clock tampering protection
+    const Settings = require('../models/settings');
+    const settings = Settings.get();
     const now = Math.floor(Date.now() / 1000);
+
+    if (settings && settings.last_observed_time && now < settings.last_observed_time) {
+      return { status: 'tampered', message: 'System clock tampering detected. Please correct your system time.' };
+    }
+
+    // Update last_observed_time in DB
+    if (settings) {
+      Settings.updateLastObservedTime(Math.max(now, settings.last_observed_time || 0));
+    } else {
+      Settings.updateLastObservedTime(now);
+    }
+
     const expireTime = new Date(lic.expire).getTime() / 1000;
 
     if (expireTime < now) {
@@ -63,13 +99,15 @@ class LicenseManager {
       const result = await response.json();
 
       if (result.status === 'active') {
+        const lastCheck = Math.floor(Date.now() / 1000);
         const licData = {
           key: result.license.key,
           email: result.license.email,
           device_id: result.license.device,
           expire: result.license.expire,
           signature: result.signature,
-          last_check: Math.floor(Date.now() / 1000)
+          last_check: lastCheck,
+          local_signature: generateLocalCheckSignature(lastCheck, result.license.device)
         };
         License.set(licData);
 
@@ -127,10 +165,20 @@ class LicenseManager {
 
       if (sign !== lic.signature) {
         console.error('Periodic check failed: signature invalid.');
-        // Reload watcher to stop watching rules
         const watcherService = require('./watcher');
         watcherService.reload();
         return;
+      }
+
+      // Verify local database signature
+      if (lic.last_check) {
+        const localSign = generateLocalCheckSignature(lic.last_check, lic.device_id);
+        if (localSign !== lic.local_signature) {
+          console.error('Periodic check failed: local signature invalid.');
+          const watcherService = require('./watcher');
+          watcherService.reload();
+          return;
+        }
       }
 
       try {
@@ -142,24 +190,28 @@ class LicenseManager {
         const result = await response.json();
 
         if (result.status === 'active') {
+          const lastCheck = Math.floor(Date.now() / 1000);
           License.set({
             key: lic.key,
             email: lic.email,
             device_id: lic.device_id,
             expire: result.expire || lic.expire,
             signature: lic.signature,
-            last_check: Math.floor(Date.now() / 1000)
+            last_check: lastCheck,
+            local_signature: generateLocalCheckSignature(lastCheck, lic.device_id)
           });
           console.log('Periodic check: License is active. Updated last_check.');
         } else if (['blocked', 'device_mismatch', 'expired'].includes(result.status)) {
           // Force expire local license
+          const lastCheck = lic.last_check;
           License.set({
             key: lic.key,
             email: lic.email,
             device_id: lic.device_id,
             expire: '1970-01-01',
             signature: lic.signature,
-            last_check: lic.last_check
+            last_check: lastCheck,
+            local_signature: generateLocalCheckSignature(lastCheck, lic.device_id)
           });
           console.warn(`Periodic check: License became ${result.status}. Reloading watcher.`);
           const watcherService = require('./watcher');
@@ -167,7 +219,26 @@ class LicenseManager {
         }
       } catch (error) {
         console.warn('Periodic check failed to reach license server. Relying on grace period.', error.message);
+        
+        // Clock tampering check during offline state
+        const Settings = require('../models/settings');
+        const settings = Settings.get();
         const now = Math.floor(Date.now() / 1000);
+
+        if (settings && settings.last_observed_time && now < settings.last_observed_time) {
+          console.error('Clock tampering detected during periodic check.');
+          const watcherService = require('./watcher');
+          watcherService.reload();
+          return;
+        }
+
+        // Update last_observed_time
+        if (settings) {
+          Settings.updateLastObservedTime(Math.max(now, settings.last_observed_time || 0));
+        } else {
+          Settings.updateLastObservedTime(now);
+        }
+
         if (now - lic.last_check > GRACE_PERIOD) {
           console.error('Grace period expired during offline check. Reloading watcher.');
           const watcherService = require('./watcher');
